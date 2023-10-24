@@ -8,12 +8,128 @@ import { Colors, type ThemeMode } from '../../theme';
  */
 const styles = (theme: ThemeMode) =>
   StyleSheet.create({
-    screenView: {
-      backgroundColor: Colors[theme]?.white,
-      flex: 1
+    addToCartButton: {
+      backgroundColor: 'green',
+      marginVertical: 10
     },
-    textView: {
-      color: Colors[theme]?.black
+    addToCartButtonTitle: {
+      fontSize: 16
+    },
+    btnContainer: {
+      flexDirection: 'row',
+      justifyContent: 'space-evenly'
+    },
+    buttonContainerStyle: {
+      marginVertical: 10
+    },
+    card: {
+      borderRadius: 10,
+      marginVertical: 30,
+      paddingBottom: -10,
+      paddingTop: 20
+    },
+    cartButtonContainerStyle: {
+      backgroundColor: 'black',
+      borderColor: 'white',
+      borderRadius: 30,
+      borderWidth: 2
+    },
+    cartButtonStyle: {
+      backgroundColor: 'black',
+      borderColor: 'white',
+      borderRadius: 30,
+      borderWidth: 2,
+      minWidth: 130,
+      paddingHorizontal: 50
+    },
+    cartTextStyle: {
+      fontWeight: 'bold',
+      paddingVertical: 4
+    },
+    categoryButton: {
+      backgroundColor: '#e1ede3',
+      borderRadius: 20,
+      marginHorizontal: 5,
+      minWidth: 140,
+      paddingVertical: 10
+    },
+    categoryButtonText: {
+      color: 'black',
+      fontWeight: 'bold'
+    },
+    container: {
+      backgroundColor: Colors[theme].primary,
+      flex: 1,
+      marginTop: 45,
+      padding: 10
+    },
+    listContainContainer: {
+      paddingBottom: 80
+    },
+    productBrand: {
+      color: '#888',
+      fontSize: 14,
+      fontWeight: 'bold'
+    },
+    productBrandAndCategoryContainer: {
+      flexDirection: 'row',
+      justifyContent: 'space-evenly',
+      marginTop: 5
+    },
+    productCategory: {
+      color: '#333333',
+      fontSize: 14
+    },
+    productDescription: {
+      fontSize: 14,
+      marginTop: 5
+    },
+    productImage: {
+      height: 200
+    },
+    productImageGallery: {
+      height: 80,
+      marginHorizontal: 5,
+      width: 80
+    },
+    productPrice: {
+      color: Colors[theme].primary,
+      fontSize: 18,
+      fontWeight: 'bold',
+      marginTop: 5
+    },
+    productRating: {
+      fontSize: 14
+    },
+    productStock: {
+      fontSize: 14
+    },
+    productTitle: {
+      fontSize: 18,
+      fontWeight: 'bold',
+      marginTop: 10
+    },
+    searchInput: {
+      backgroundColor: 'white',
+      borderRadius: 40,
+      fontSize: 16,
+      fontWeight: 'bold',
+      marginBottom: 10,
+      marginTop: 10,
+      paddingHorizontal: 10,
+      paddingVertical: 15
+    },
+    thumbnailContainer: {
+      marginHorizontal: 5
+    },
+    thumbnailImage: {
+      borderRadius: 5,
+      height: 60,
+      width: 60
+    },
+    thumbnailScrollView: {
+      flexDirection: 'row',
+      marginTop: 5
     }
   });
 

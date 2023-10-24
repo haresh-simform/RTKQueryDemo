@@ -8,12 +8,64 @@ import { Colors, type ThemeMode } from '../../theme';
  */
 const styles = (theme: ThemeMode) =>
   StyleSheet.create({
-    screenView: {
-      backgroundColor: Colors[theme]?.white,
+    card: {
+      borderRadius: 8,
+      elevation: 5,
+      margin: 16,
+      shadowColor: theme === 'dark' ? 'white' : 'black',
+      shadowOffset: { width: 0, height: 2 },
+      shadowOpacity: 0.25,
+      shadowRadius: 3.84
+    },
+    container: {
       flex: 1
     },
-    textView: {
-      color: Colors[theme]?.black
+    productBrand: {
+      fontSize: 16,
+      marginVertical: 5
+    },
+    productCategory: {
+      fontSize: 16,
+      marginVertical: 5
+    },
+    productDescription: {
+      fontSize: 16,
+      marginVertical: 10
+    },
+    productDiscount: {
+      fontSize: 16,
+      marginVertical: 5
+    },
+    productId: {
+      fontSize: 16,
+      marginVertical: 5
+    },
+    productImage: {
+      height: 200,
+      width: '100%'
+    },
+    productImageGallery: {
+      height: 100,
+      marginHorizontal: 10,
+      width: 100
+    },
+    productPrice: {
+      color: 'green',
+      fontSize: 16,
+      fontWeight: 'bold'
+    },
+    productRating: {
+      fontSize: 16,
+      marginVertical: 5
+    },
+    productStock: {
+      fontSize: 16,
+      marginVertical: 5
+    },
+    productTitle: {
+      fontSize: 20,
+      fontWeight: 'bold',
+      marginVertical: 10
     }
   });
 

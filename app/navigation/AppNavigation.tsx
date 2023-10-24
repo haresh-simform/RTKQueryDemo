@@ -3,7 +3,7 @@ import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import React from 'react';
 import { AppConst, ROUTES } from '../constants';
 import { useTheme } from '../hooks';
-import { DetailsScreen, HomeScreen, SigninScreen } from '../modules';
+import { DetailsScreen, HomeScreen, AddProductScreen, EditProductScreen } from '../modules';
 import { Colors } from '../theme';
 import { getLinkConfiguration, navigationRef } from '../utils';
 
@@ -20,8 +20,10 @@ type RootStackParamList = {
   // add types for route params here e.g. -
   // [ROUTES.Profile]: { id: string };
   [ROUTES.Home]: undefined;
-  [ROUTES.Details]: undefined;
+  [ROUTES.AddProduct]: undefined;
   [ROUTES.SignIn]: undefined;
+  [ROUTES.EditProduct]: { url: Product };
+  [ROUTES.Details]: { url: Product };
 };
 
 /**
@@ -67,12 +69,31 @@ const AppContainer = () => {
       }}
     >
       <RootStack.Navigator>
-        <RootStack.Screen name={ROUTES.Home} component={HomeScreen} />
-        <RootStack.Screen name={ROUTES.SignIn} component={SigninScreen} />
+        <RootStack.Screen
+          name={ROUTES.Home}
+          component={HomeScreen}
+          options={{ headerShown: false }}
+        />
+        <RootStack.Screen name={ROUTES.AddProduct} component={AddProductScreen} />
         <RootStack.Screen name={ROUTES.Details} component={DetailsScreen} />
+        <RootStack.Screen name={ROUTES.EditProduct} component={EditProductScreen} />
       </RootStack.Navigator>
     </NavigationContainer>
   );
 };
 
 export default AppContainer;
+
+interface Product {
+  id: number;
+  title: string;
+  description: string;
+  price: number;
+  discountPercentage: number;
+  rating: number;
+  stock: number;
+  brand: string;
+  category: string;
+  thumbnail: string;
+  images: string[];
+}

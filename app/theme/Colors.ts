@@ -10,7 +10,7 @@ const themeColors: Record<string, string> = {
   pink: '#BA25EB',
   orange: '#F39C3C',
   lightBlue: '#3787FC',
-  red: '#DD2C2C',
+  red: '#eeedf7',
   darkBlue: '#374dfc',
   transparent: 'transparent'
 };
