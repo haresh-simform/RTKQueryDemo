@@ -1,13 +1,19 @@
-import axios from 'axios';
+/* eslint-disable require-jsdoc */
+/* eslint-disable react/prop-types */
 import React, { useState } from 'react';
 import { View, ScrollView, Alert } from 'react-native';
 import { Input, Button } from 'react-native-elements';
+import Toast from 'react-native-toast-message';
 import { useTheme } from '../../hooks';
+import { useUpdateProductMutation } from '../../services/ApiServices';
+import { navigateBack } from '../../utils';
+
 import styleSheet from './EditProductStyles';
 
 const EditProductScreen = ({ route }) => {
   const { item } = route.params;
   const [productData, setProductData] = useState({ ...item });
+  const [updateProduct] = useUpdateProductMutation();
 
   const { styles } = useTheme(styleSheet);
 
@@ -45,19 +51,15 @@ const EditProductScreen = ({ route }) => {
       changedFields.category = productData.category;
     }
     if (Object.keys(changedFields).length > 0) {
-      axios
-        .put(`https://dummyjson.com/products/${item.id}`, changedFields, {
-          headers: {
-            'Content-Type': 'application/json'
-          }
-        })
-        .then((response) => {
-          Alert.alert('Success', JSON.stringify(response.data));
-        })
-        .catch((error) => {
-          console.error(error);
-          Alert.alert('Error', 'Failed to update the product');
-        });
+      updateProduct(JSON.stringify(changedFields)).then((response) => {
+        if (response) {
+          Toast.show({
+            type: 'success',
+            text1: 'Product updated successfully'
+          });
+          navigateBack();
+        }
+      });
     } else {
       Alert.alert('No changes made to the product data.');
     }

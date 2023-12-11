@@ -1,11 +1,16 @@
+/* eslint-disable require-jsdoc */
 import React, { useState } from 'react';
 import { View, ScrollView } from 'react-native';
 import { Input, Button } from 'react-native-elements';
+import Toast from 'react-native-toast-message';
 import { useTheme } from '../../hooks';
+import { useAddProductMutation } from '../../services/ApiServices';
 import { navigateBack } from '../../utils';
 import styleSheet from './AddProductStyles';
 
 const AddProductScreen = () => {
+  const [addProduct] = useAddProductMutation();
+
   const [productData, setProductData] = useState({
     title: '',
     description: '',
@@ -19,21 +24,17 @@ const AddProductScreen = () => {
   const { styles } = useTheme(styleSheet);
 
   const handleAddProduct = () => {
-    fetch('https://dummyjson.com/products/add', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(productData)
-    })
-      .then((response) => response.json())
-      .then((data) => {
+    addProduct(JSON.stringify(productData)).then((response) => {
+      if (response) {
+        Toast.show({
+          type: 'success',
+          text1: 'Product added successfully'
+        });
         navigateBack();
-      })
-      .catch((error) => {
-        // Handle errors, e.g., display an error message.
-      });
+      }
+    });
   };
 
-  console.log(productData);
   return (
     <View style={styles.container}>
       <ScrollView>

@@ -1,8 +1,9 @@
-import React, { type FC} from 'react';
+import React, { type FC } from 'react';
+import Toast from 'react-native-toast-message';
 import { Provider } from 'react-redux';
 import { PersistGate } from 'redux-persist/integration/react';
-import { persistor, store } from './redux';
 import { AppContainer } from './navigation';
+import { store } from './services/store';
 
 /**
  * The main App component.
@@ -13,9 +14,8 @@ import { AppContainer } from './navigation';
 const App: FC = () => {
   return (
     <Provider store={store}>
-      <PersistGate loading={null} persistor={persistor}>
-        <AppContainer />
-      </PersistGate>
+      <AppContainer />
+      <Toast />
     </Provider>
   );
 };

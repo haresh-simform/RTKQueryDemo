@@ -1,3 +1,5 @@
+import { Platform } from 'react-native';
+/* eslint-disable react-native/no-color-literals */
 import { StyleSheet } from 'react-native';
 import { Colors, type ThemeMode } from '../../theme';
 
@@ -55,7 +57,9 @@ const styles = (theme: ThemeMode) =>
     },
     categoryButtonText: {
       color: 'black',
-      fontWeight: 'bold'
+      fontSize: 14,
+      fontWeight: 'bold',
+      paddingBottom: 5
     },
     container: {
       backgroundColor: Colors[theme].primary,
@@ -63,8 +67,38 @@ const styles = (theme: ThemeMode) =>
       marginTop: 45,
       padding: 10
     },
+    flottinButtonContainer: {
+      alignItems: 'center',
+      backgroundColor: 'black',
+      borderColor: 'black',
+      borderRadius: 100,
+      borderWidth: 1,
+      bottom: 40,
+      height: 70,
+      justifyContent: 'center',
+      position: 'absolute',
+      right: 30,
+      width: 70,
+      ...Platform.select({
+        ios: {
+          shadowColor: 'yellow',
+          shadowOpacity: 1,
+          shadowOffset: { width: 1, height: 1 },
+          shadowRadius: 10
+        },
+        android: {
+          elevation: 4
+        }
+      })
+    },
     listContainContainer: {
       paddingBottom: 80
+    },
+    plusIcon: {
+      alignSelf: 'center',
+      height: 30,
+      tintColor: 'white',
+      width: 30
     },
     productBrand: {
       color: '#888',
@@ -116,7 +150,7 @@ const styles = (theme: ThemeMode) =>
       fontWeight: 'bold',
       marginBottom: 10,
       marginTop: 10,
-      paddingHorizontal: 10,
+      paddingHorizontal: 15,
       paddingVertical: 15
     },
     thumbnailContainer: {

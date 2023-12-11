@@ -1,9 +1,29 @@
-import axios from 'axios';
+/* eslint-disable require-jsdoc */
+/* eslint-disable no-empty-pattern */
+
 import React, { useEffect, useState, type FC } from 'react';
-import { View, FlatList, Image, Text, Alert, ScrollView, TextInput, Pressable } from 'react-native';
+import {
+  View,
+  FlatList,
+  Image,
+  Text,
+  ScrollView,
+  TextInput,
+  Pressable,
+  TouchableOpacity
+} from 'react-native';
 import { Card, Button } from 'react-native-elements';
+import Toast from 'react-native-toast-message';
+import { Icons } from '../../assets';
 import { ROUTES } from '../../constants';
 import { useTheme } from '../../hooks';
+import {
+  useGetCategoriesQuery,
+  useGetProductsQuery,
+  useLazyGetCategorieSpecificProductQuery,
+  useLazyGetSearchedProductQuery,
+  useDeleteProductMutation
+} from '../../services/ApiServices';
 import { navigateWithParam } from '../../utils';
 import styleSheet from './HomeStyles';
 
@@ -14,24 +34,35 @@ import styleSheet from './HomeStyles';
 const HomeScreen: FC = (): React.ReactElement => {
   const { styles } = useTheme(styleSheet);
   const [products, setProducts] = useState([]);
-  const [categories, setCategories] = useState([]);
+  const [categories, setCategories] = useState<String[]>([]);
   const [searchQuery, setSearchQuery] = useState('');
-  const [searchTimeout, setSearchTimeout] = useState(null); // Store the timeout
+  const [searchTimeout, setSearchTimeout] = useState(null);
+  const { data: productsData } = useGetProductsQuery();
+  const { data: categoriesList } = useGetCategoriesQuery();
+  const [deleteProduct] = useDeleteProductMutation();
+
+  const [fetchCategoryWiseData, { data: categoryWiseData }] =
+    useLazyGetCategorieSpecificProductQuery({});
+  const [fetchProductBySearch, {}] = useLazyGetSearchedProductQuery({});
 
   useEffect(() => {
-    // Fetch products from the API
-    axios.get('https://dummyjson.com/products').then((response) => {
-      setProducts(response.data.products);
-    });
+    if (productsData) {
+      setProducts(productsData.products);
+    }
+  }, [productsData]);
 
-    // Fetch categories from the API
-    axios.get('https://dummyjson.com/products/categories').then((response) => {
-      const fetchedCategories = response.data;
-      const categoriesWithAll = ['All', ...fetchedCategories];
-      setCategories(categoriesWithAll);
-    });
-  }, []);
+  useEffect(() => {
+    if (categoryWiseData) {
+      setProducts(categoryWiseData?.products);
+    }
+  }, [categoryWiseData]);
 
+  useEffect(() => {
+    if (categoriesList?.length) {
+      const categoriesWithAll = ['All', ...categoriesList];
+      setCategories(categoriesWithAll as String[]);
+    }
+  }, [categoriesList]);
   // Define the debounce function
   const debounce = (func, delay) => {
     // Clear the previous timeout, if any
@@ -44,16 +75,12 @@ const HomeScreen: FC = (): React.ReactElement => {
   };
 
   const onDeletePressed = (item: Product) => {
-    fetch(`https://dummyjson.com/products/${item.id}`, {
-      method: 'DELETE'
-    })
-      .then((res) => res.json())
-      .then((response) => {
-        Alert.alert('res', JSON.stringify(response.isDeleted));
-      })
-      .catch((error) => {
-        console.error(error);
+    deleteProduct(`${item.id}`).then(() => {
+      Toast.show({
+        type: 'success',
+        text1: 'Product deleted successfully'
       });
+    });
   };
 
   const handleSearch = (query: string) => {
@@ -62,11 +89,7 @@ const HomeScreen: FC = (): React.ReactElement => {
   };
 
   const filterProducts = (query: string) => {
-    fetch(`https://dummyjson.com/products/search?q=${query.toLowerCase()}`)
-      .then((res) => res.json())
-      .then((response) => {
-        setProducts(response.products);
-      });
+    fetchProductBySearch(query).then((result) => setProducts(result?.data?.products));
   };
   const renderProductItem = ({ item }) => (
     <Card containerStyle={styles.card}>
@@ -112,20 +135,9 @@ const HomeScreen: FC = (): React.ReactElement => {
 
   const filterProductsByCategory = (category: string) => {
     if (category === 'All') {
-      axios.get('https://dummyjson.com/products').then((response) => {
-        setProducts(response.data.products);
-      });
+      setProducts(productsData?.products);
     } else {
-      axios
-        .get(`https://dummyjson.com/products/category/${category}`)
-        .then((response) => {
-          const newProducts = response.data.products;
-          setProducts(newProducts);
-        })
-        .catch((error) => {
-          // Handle errors, e.g., display an error message.
-          console.error(error);
-        });
+      fetchCategoryWiseData(category);
     }
   };
 
@@ -147,6 +159,14 @@ const HomeScreen: FC = (): React.ReactElement => {
         keyExtractor={(item) => item.id.toString()}
         renderItem={renderProductItem}
       />
+      <TouchableOpacity
+        style={styles.flottinButtonContainer}
+        onPress={() => {
+          navigateWithParam(ROUTES.AddProduct);
+        }}
+      >
+        <Image style={styles.plusIcon} source={Icons.plus} />
+      </TouchableOpacity>
     </View>
   );
 };

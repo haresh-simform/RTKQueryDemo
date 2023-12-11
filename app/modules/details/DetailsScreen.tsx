@@ -1,25 +1,15 @@
-import React, { useEffect, useState } from 'react';
+import React, { useRef } from 'react';
 import { View, ScrollView, Text, Image } from 'react-native';
 import { Card } from 'react-native-elements';
 import { useTheme } from '../../hooks';
+import { useGetProductDetailsQuery } from '../../services/ApiServices';
 import styleSheet from './DetailsStyles';
-
+// eslint-disable-next-line require-jsdoc
 const ProductDetailsScreen = ({ route }) => {
   const { item } = route.params;
-  const [product, setProduct] = useState(null);
   const { styles } = useTheme(styleSheet);
-
-  useEffect(() => {
-    // Fetch product details from the API using the item.id
-    fetch(`https://dummyjson.com/products/${item.id}`)
-      .then((res) => res.json())
-      .then((data) => {
-        setProduct(data);
-      })
-      .catch((error) => {
-        console.error(error);
-      });
-  }, [item.id]);
+  const { data: product } = useGetProductDetailsQuery({ id: item.id, sesstion: 2 }); // catching for this scenario is good
+  // BY DEFAULT IT ALWAYS CATCH UNTIL WE DON'T HAVE ANY CHANGE IN PARAMS
 
   return (
     <View style={styles.container}>
@@ -35,8 +25,6 @@ const ProductDetailsScreen = ({ route }) => {
             <Text style={styles.productRating}>Rating: {product.rating}</Text>
             <Text style={styles.productDiscount}>Discount: {product.discountPercentage}%</Text>
             <Text style={styles.productStock}>Stock: {product.stock} available</Text>
-            <Text style={styles.productId}>Product ID: {product.id}</Text>
-            {/* Display images */}
             <ScrollView horizontal showsHorizontalScrollIndicator={false}>
               {product.images.map((image, index) => (
                 <Image key={index} source={{ uri: image }} style={styles.productImageGallery} />
@@ -50,3 +38,17 @@ const ProductDetailsScreen = ({ route }) => {
 };
 
 export default ProductDetailsScreen;
+
+interface Product {
+  id: number;
+  title: string;
+  description: string;
+  price: number;
+  discountPercentage: number;
+  rating: number;
+  stock: number;
+  brand: string;
+  category: string;
+  thumbnail: string;
+  images: string[];
+}
